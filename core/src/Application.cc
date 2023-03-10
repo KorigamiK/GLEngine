@@ -15,4 +15,8 @@ void Application::Run() const {
   }
 }
 
+void Application::Init() {
+  _window = std::make_unique<GLCore::Window>(_title, _width, _height);
+}
+
 }  // namespace Engine
