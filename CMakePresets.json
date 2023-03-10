@@ -1,0 +1,54 @@
+{
+	"version": 2,
+	"cmakeMinimumRequired": {
+		"major": 3,
+		"minor": 14,
+		"patch": 0
+	},
+	"configurePresets": [
+		{
+			"name": "Web",
+			"description": "Builds the web version of the fractals",
+			"binaryDir": "${sourceDir}/build/${presetName}",
+			"generator": "Unix Makefiles",
+			"cacheVariables": {
+				"CMAKE_BUILD_TYPE": "Release",
+				"CMAKE_CXX_STANDARD": "20",
+				"CMAKE_CXX_STANDARD_REQUIRED": "ON",
+				"CMAKE_TOOLCHAIN_FILE": "/usr/lib/emscripten/cmake/Modules/Platform/Emscripten.cmake",
+				"CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+			}
+		},
+		{
+			"name": "Linux",
+			"displayName": "Linux - Clang 15.0.7 x86_64-pc-linux-gnu",
+			"description": "Using compilers: C = /usr/bin/clang, CXX = /usr/bin/clang++",
+			"binaryDir": "${sourceDir}/build/${presetName}",
+			"cacheVariables": {
+				"CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/${presetName}",
+				"CMAKE_C_COMPILER": "/usr/bin/clang",
+				"CMAKE_CXX_COMPILER": "/usr/bin/clang++",
+				"CMAKE_BUILD_TYPE": "Debug",
+				"CMAKE_CXX_STANDARD": "20",
+				"CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+			},
+			"generator": "Ninja"
+		}
+	],
+	"testPresets": [
+		{
+			"name": "TestWeb",
+			"description": "",
+			"displayName": "",
+			"configurePreset": "Web"
+		}
+	],
+	"buildPresets": [
+		{
+			"name": "TestLinux",
+			"description": "",
+			"displayName": "",
+			"configurePreset": "Linux"
+		}
+	]
+}
