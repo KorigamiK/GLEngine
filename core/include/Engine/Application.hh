@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Event.hh"
+#include "Events/Event.hh"
+#include "GLCore/LayerStack.hh"
 #include "GLCore/Window.hh"
 
 #include <memory>
@@ -15,20 +16,24 @@ class Application {
               unsigned int height = 272);
   virtual ~Application() = default;
 
-  void Run() const;
-  virtual void OnAttach(){};
-  virtual void OnUpdate(double deltaTime) = 0;
-  virtual void OnRender() = 0;
-  virtual void OnEvent(Engine::Event::BaseEvents event) = 0;
-  virtual void OnDetach(){};
+  Application(const Application&) = delete;
+
+  Application& operator=(const Application&) = delete;
+
+  static Application& Get() { return *__instance; }
+
+  void Run();
+
+  void OnEvent(Engine::Events::BaseEvent& event);
+
+  void PushLayer(GLCore::Layer* layer);
+
+  void PopLayer(GLCore::Layer* layer);
 
  private:
+  static Application* __instance;
   bool _running = true;
-  const char* _title;
-  unsigned int _width;
-  unsigned int _height;
-
-  void Init();
+  GLCore::LayerStack _layerStack;
 
  protected:
   std::unique_ptr<GLCore::Window> _window;

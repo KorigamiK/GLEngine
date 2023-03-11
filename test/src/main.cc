@@ -1,20 +1,17 @@
 #include "Engine/Application.hh"
-#include "Engine/Event.hh"
+#include "Engine/Events/ApplicationEvent.hh"
 #include "Engine/Util/Logger.hh"
 
 #include <GL/glew.h>
 
 using namespace Engine::Logger;
 
-class TestApplication : public Engine::Application {
- public:
-  TestApplication() : Engine::Application() {}
-
+class TestLayer : public Engine::GLCore::Layer {
   virtual void OnUpdate(double deltaTime) override { Info("OnUpdate"); }
 
   virtual void OnRender() override { Info("OnRender"); }
 
-  virtual void OnEvent(Engine::Event::BaseEvents event) override {
+  virtual void OnEvent(Engine::Events::BaseEvent& event) override {
     Info("OnEvent");
   }
 
@@ -27,8 +24,13 @@ class TestApplication : public Engine::Application {
   }
 };
 
+class TestApplication : public Engine::Application {
+ public:
+  TestApplication() : Engine::Application() { PushLayer(new TestLayer()); }
+};
+
 auto main(int argc, const char* argv[]) -> int {
-  TestApplication app;
-  app.Run();
+  std::unique_ptr<TestApplication> app = std::make_unique<TestApplication>();
+  app->Run();
   return 0;
 }

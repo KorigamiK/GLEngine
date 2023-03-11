@@ -1,5 +1,7 @@
 #include "Engine/GLCore/Window.hh"
 
+#include "Engine/Events/ApplicationEvent.hh"
+#include "Engine/Events/KeyEvent.hh"
 #include "Engine/Util/Logger.hh"
 
 #include <GL/glew.h>
@@ -61,4 +63,67 @@ void Window::Shutdown() {
 Window::~Window() {
   Info("Window::~Window()");
   Shutdown();
+}
+
+void Window::OnUpdate() const {
+  SDL_GL_SwapWindow(_window);
+}
+
+void Window::PollEvents() const {
+  SDL_Event event;
+  while (SDL_PollEvent(&event)) {
+    switch (event.type) {
+      case SDL_QUIT: {
+        Engine::Events::WindowCloseEvent windowCloseEvent;
+        _eventCallback(windowCloseEvent);
+        break;
+      }
+      case SDL_WINDOWEVENT: {
+        switch (event.window.event) {
+          case SDL_WINDOWEVENT_RESIZED: {
+            Engine::Events::WindowResizeEvent windowResizeEvent(
+                event.window.data1, event.window.data2);
+            _eventCallback(windowResizeEvent);
+            break;
+          }
+        }
+        break;
+      }
+      case SDL_KEYDOWN: {
+        Engine::Events::KeyPressedEvent keyPressedEvent(event.key.keysym,
+                                                        event.key.repeat);
+        _eventCallback(keyPressedEvent);
+        break;
+      }
+      case SDL_KEYUP: {
+        Engine::Events::KeyReleasedEvent keyReleasedEvent(event.key.keysym);
+        _eventCallback(keyReleasedEvent);
+        break;
+      }
+      case SDL_MOUSEBUTTONDOWN: {
+        // Engine::Events::MouseButtonPressedEvent mouseButtonPressedEvent(
+        //     event.button.button);
+        // _eventCallback(mouseButtonPressedEvent);
+        break;
+      }
+      case SDL_MOUSEBUTTONUP: {
+        // Engine::Events::MouseButtonReleasedEvent mouseButtonReleasedEvent(
+        //     event.button.button);
+        // _eventCallback(mouseButtonReleasedEvent);
+        break;
+      }
+      case SDL_MOUSEMOTION: {
+        // Engine::Events::MouseMovedEvent mouseMovedEvent(event.motion.x,
+        //                                                 event.motion.y);
+        // _eventCallback(mouseMovedEvent);
+        break;
+      }
+      case SDL_MOUSEWHEEL: {
+        // Engine::Events::MouseScrolledEvent mouseScrolledEvent(event.wheel.x,
+        //                                                       event.wheel.y);
+        // _eventCallback(mouseScrolledEvent);
+        break;
+      }
+    }
+  }
 }
