@@ -51,6 +51,8 @@ void Window::Init() {
   // Enable VSync
   SDL_GL_SetSwapInterval(1);
 
+  Info("OpenGL Vendor: ", glGetString(GL_VENDOR));
+  Info("OpenGL Renderer: ", glGetString(GL_RENDERER));
   Info("OpenGL Version: ", glGetString(GL_VERSION));
 }
 

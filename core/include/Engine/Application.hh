@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Events/ApplicationEvent.hh"
 #include "Events/Event.hh"
 #include "GLCore/LayerStack.hh"
 #include "GLCore/Window.hh"
@@ -37,6 +38,11 @@ class Application {
 
  protected:
   std::unique_ptr<GLCore::Window> _window;
+
+  inline bool OnWindowClose(Engine::Events::WindowCloseEvent& event) {
+    _running = false;
+    return true;
+  }
 };
 
 }  // namespace Engine

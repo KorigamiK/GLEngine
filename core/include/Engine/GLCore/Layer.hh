@@ -5,6 +5,7 @@
 #include <string>
 
 namespace Engine::GLCore {
+
 class Layer {
  public:
   Layer(const std::string& name = "Layer");
@@ -19,4 +20,5 @@ class Layer {
  protected:
   std::string _name;
 };
+
 }  // namespace Engine::GLCore

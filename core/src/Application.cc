@@ -1,5 +1,7 @@
 #include "Engine/Application.hh"
 
+#include "Engine/Events/ApplicationEvent.hh"
+
 namespace Engine {
 
 Application* Application::__instance = nullptr;
@@ -10,8 +12,7 @@ Application::Application(const char* name,
   if (__instance == nullptr) {
     __instance = this;
     _window = std::make_unique<GLCore::Window>(name, width, height);
-    _window->SetEventCallback(
-        std::bind(&Application::OnEvent, this, std::placeholders::_1));
+    _window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
   } else {
     throw std::runtime_error("Application already exists");
   }
@@ -19,6 +20,7 @@ Application::Application(const char* name,
 
 void Application::Run() {
   unsigned lastTime = SDL_GetTicks();
+
   while (_running) {
     // Update game state
     unsigned currentTime = SDL_GetTicks();
@@ -34,16 +36,21 @@ void Application::Run() {
     for (GLCore::Layer* layer : _layerStack)
       layer->OnRender();
 
-    _window->OnUpdate();  // Swap buffers
+    // Swap buffers
+    _window->OnUpdate();
   }
 }
 
 void Application::OnEvent(Engine::Events::BaseEvent& event) {
+  Engine::Events::EventDispatcher dispatcher(event);
+
+  dispatcher.Dispatch<Engine::Events::WindowCloseEvent>(
+      BIND_EVENT_FN(Application::OnWindowClose));
+
   for (auto it = _layerStack.end(); it != _layerStack.begin();) {
     (*--it)->OnEvent(event);
-    if (event.handled) {
+    if (event.handled)
       break;
-    }
   }
 }
 

@@ -1,5 +1,4 @@
 #include "Engine/Application.hh"
-#include "Engine/Events/ApplicationEvent.hh"
 #include "Engine/Util/Logger.hh"
 
 #include <GL/glew.h>
@@ -7,12 +6,21 @@
 using namespace Engine::Logger;
 
 class TestLayer : public Engine::GLCore::Layer {
-  virtual void OnUpdate(double deltaTime) override { Info("OnUpdate"); }
+  virtual void OnUpdate(double deltaTime) override {}
 
-  virtual void OnRender() override { Info("OnRender"); }
+  virtual void OnRender() override {
+    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  }
 
   virtual void OnEvent(Engine::Events::BaseEvent& event) override {
-    Info("OnEvent");
+    Engine::Events::EventDispatcher dispatcher(event);
+
+    dispatcher.Dispatch<Engine::Events::WindowCloseEvent>([&](auto& e) {
+      Info("WindowCloseEvent");
+      this->OnDetach();
+      return true;
+    });
   }
 
   virtual void OnAttach() override {
