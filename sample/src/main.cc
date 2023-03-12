@@ -21,6 +21,12 @@ class TestLayer : public Engine::GLCore::Layer {
       this->OnDetach();
       return true;
     });
+
+    dispatcher.Dispatch<Engine::Events::WindowResizeEvent>([&](auto& e) {
+      Info("WindowResizeEvent");
+      Info("Width: %d, Height: %d", e.GetWidth(), e.GetHeight());
+      return true;
+    });
   }
 
   virtual void OnAttach() override {

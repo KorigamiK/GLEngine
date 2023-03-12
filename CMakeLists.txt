@@ -15,7 +15,7 @@ enable_testing()
 set(BUILD_TESTING ON CACHE BOOL "Build tests")
 
 if (BUILD_TESTING)
-	add_subdirectory(test)
+	add_subdirectory(sample)
 endif()
 
 add_custom_target(
