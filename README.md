@@ -14,8 +14,6 @@ Android.Compiling for the web is also supported using [Emscripten](https://emscr
 
 ### Building and Installing
 
-See the [BUILDING](BUILDING.md) document.
-
 The project uses CMake for its build system. To use the library in your project,
 simply add this repository as a submodule and add the following lines to your CMakeLists.txt file.
 
