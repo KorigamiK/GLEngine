@@ -36,10 +36,13 @@ class Application {
   bool _running = true;
   GLCore::LayerStack _layerStack;
 
+  void _MainLoop(unsigned lastTime = SDL_GetTicks());
+
  protected:
   std::unique_ptr<GLCore::Window> _window;
 
   inline bool OnWindowClose(Engine::Events::WindowCloseEvent& event) {
+    (void)event;
     _running = false;
     return true;
   }

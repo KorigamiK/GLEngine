@@ -37,8 +37,9 @@ class TestApplication : public Engine::Application {
   TestApplication() : Engine::Application() { PushLayer(new TestLayer()); }
 };
 
-auto main(int argc, const char* argv[]) -> int {
+auto main() -> int {
   std::unique_ptr<TestApplication> app = std::make_unique<TestApplication>();
   app->Run();
+
   return 0;
 }
